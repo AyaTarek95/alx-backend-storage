@@ -2,7 +2,7 @@
 """  a Cache class"""
 import redis
 import uuid
-from typing import Union
+from typing import Union, Optional, Any, Callable
 
 
 class Cache:
