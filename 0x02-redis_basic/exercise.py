@@ -13,7 +13,7 @@ def count_calls(method: Callable) -> Callable:
     def wrapper(self, *args, **kwargs):
         """Wrapper method"""
         self._redis.incr(method.__qualname__)
-        return method(self, *args, **kwargs
+        return method(self, *args, **kwargs)
     return wrapper
 
 
@@ -39,7 +39,7 @@ def replay(method: Callable) -> Callable:
     outputs = r.lrange(f"{method_name}:outputs", 0, 1)
     print(f"{method_name} was called {count} times:")
     for i, o in zip(inputs, outputs):
-        print(f"{method_name}(*{i.decode('utf-8')}) -> {o.decode('utf-8')}"
+        print(f"{method_name}(*{i.decode('utf-8')}) -> {o.decode('utf-8')}")
 
 
 class Cache:
@@ -70,12 +70,21 @@ class Cache:
 
     def get(self, key: str, fn: Optional[Any] = None) -> Any:
         """get method"""
-        val = self._redis.get(key)
+        value = self._redis.get(key)
+        if value is None:
+            return None
         if fn:
-            if fn == int:
-                return self.get_int(val)
-            elif fn == str:
-                return self.get_str(val)
-            else:
-                return fn(val)
-        return val
+            return fn(value)
+        return value
+
+"""cache = Cache()
+
+TEST_CASES = {
+    b"foo": None,
+    123: int,
+    "bar": lambda d: d.decode("utf-8")
+}
+
+for value, fn in TEST_CASES.items():
+    key = cache.store(value)
+    assert cache.get(key, fn=fn) == value"""
