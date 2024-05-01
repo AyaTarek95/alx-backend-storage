@@ -30,10 +30,12 @@ class Cache:
                 return fn(value)
         return value
 
+    @staticmethode
     def get_str(value: bytes) -> str:
         """ get str methode"""
         return str(value)
-
+    
+    @staticmethode
     def get_int(value: bytes) -> int:
         """ get int methode"""
         return int(value)
