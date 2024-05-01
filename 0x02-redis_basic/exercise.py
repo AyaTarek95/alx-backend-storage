@@ -18,6 +18,15 @@ class Cache:
         self._redis.set(key, data)
         return key
 
+    @staticmethode
+    def get_str(value: bytes) -> str:
+        """ get str methode"""
+        return str(value)
+    
+    @staticmethode
+    def get_int(value: bytes) -> int:
+        """ get int methode"""
+     
     def get(self, key: str, fn: Optional[Any] = None) -> Any:
         """ get method"""
         value = self._redis.get(key)
@@ -29,13 +38,3 @@ class Cache:
             else:
                 return fn(value)
         return value
-
-    @staticmethode
-    def get_str(value: bytes) -> str:
-        """ get str methode"""
-        return str(value)
-    
-    @staticmethode
-    def get_int(value: bytes) -> int:
-        """ get int methode"""
-        return int(value)
