@@ -36,7 +36,7 @@ def replay(method: Callable) -> Callable:
     method_name = method.__qualname__
     count = r.get(method_name).decode("utf-8")
     inputs = r.lrange(f"{method_name}:inputs", 0, -1)
-    outputs = r.lrange(f"{method_name}:outputs", 0, 1)
+    outputs = r.lrange(f"{method_name}:outputs", 0, -1)
     print(f"{method_name} was called {count} times:")
     for i, o in zip(inputs, outputs):
         print(f"{method_name}(*{i.decode('utf-8')}) -> {o.decode('utf-8')}")
@@ -76,15 +76,3 @@ class Cache:
         if fn:
             return fn(value)
         return value
-
-"""cache = Cache()
-
-TEST_CASES = {
-    b"foo": None,
-    123: int,
-    "bar": lambda d: d.decode("utf-8")
-}
-
-for value, fn in TEST_CASES.items():
-    key = cache.store(value)
-    assert cache.get(key, fn=fn) == value"""
